@@ -37,7 +37,11 @@ public static class SceneWatcher
             AddScene(USceneManager.GetSceneAt(i), LoadSceneMode.Additive, false);
         
         USceneManager.sceneLoaded += (scene, mode) => AddScene(scene, mode);
-        USceneManager.sceneUnloaded += s => scenes.RemoveAt(scenes.FindIndex(d => d.name == s.name));
+        USceneManager.sceneUnloaded += s =>
+        {
+            int index = scenes.FindIndex(d => d.name == s.name);
+            if (index != -1) scenes.RemoveAt(index);
+        };
     }
 
     [HarmonyPatch(typeof(CustomSceneManager), nameof(CustomSceneManager.Start))]
